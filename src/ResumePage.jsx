@@ -7,11 +7,11 @@ import gitIcon from './assets/github.svg';
 import mySqlIcon from "./assets/mysql.png";
 
 const ITEMS = [
-  { id: "i", badge: "I", title: "Formation Scolaire", subtitle: "Collège / Lycée / Université", rank: 5 },
+  { id: "i", badge: "I", title: "Formation Scolaire", subtitle: "Collège / Lycée / Université", rank: 7 },
   { id: "ii", badge: "II", title: "Mes compétences info", subtitle: "Hard Skill", rank: 4 },
   { id: "iii", badge: "III", title: "Mes qualités", subtitle: "Soft Skill", rank: 5 },
   { id: "iv", badge: "IV", title: "Logiciel Utilisés", subtitle: "Technique", rank: 5 },
-  { id: "v", badge: "V", title: "Mon experiences", subtitle: "Mes stages", rank: 2 },
+  { id: "v", badge: "V", title: "Mon experiences", subtitle: "Mes stages", rank: 1 },
 ];
 
 const EDUCATION_ROWS = [
