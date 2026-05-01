@@ -216,8 +216,8 @@ export default function P3Menu({ onNavigate }) {
       <div className="p3-overlay">
         <div className="p3-name-tag">
           <span>Portfolio</span>
-          <span>de Naïm</span>
-          <span>Talsi</span>
+          <span>de Naïm Talsi</span>
+
         </div>
         <div className="p3-stripe" />
         <div className="p3-stripe2" />
@@ -289,8 +289,8 @@ export default function P3Menu({ onNavigate }) {
         </nav>
 
         <div className={`p3-hint ${mounted ? "mounted" : ""}`}>
-          <div className="p3-hint-row"><span className="p3-hint-key">↑↓</span><span>NAVIGATE</span></div>
-          <div className="p3-hint-row"><span className="p3-hint-key">↵</span><span>CONFIRM</span></div>
+          <div className="p3-hint-row"><span className="p3-hint-key">↑↓</span><span>NAVIGUER</span></div>
+          <div className="p3-hint-row"><span className="p3-hint-key">↵</span><span>CONFIRMER</span></div>
         </div>
       </div>
     </>

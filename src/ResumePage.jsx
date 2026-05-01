@@ -5,6 +5,10 @@ import vscodeIcon from "./assets/vscode.png";
 import blenderIcon from "./assets/blender.png";
 import gitIcon from './assets/github.svg';
 import mySqlIcon from "./assets/mysql.png";
+import entrepriseImg from "./assets/Teksial.png";
+import biaImg from "./assets/bia.jpg";
+import butImg from "./assets/but.jpg"
+import breteuilImg from "./assets/breteuil.jpg"
 
 const ITEMS = [
   { id: "i", badge: "I", title: "Formation Scolaire", subtitle: "Collège / Lycée / Université", rank: 7 },
@@ -15,9 +19,11 @@ const ITEMS = [
 ];
 
 const EDUCATION_ROWS = [
-  { index: "01", title: "Parcours STI2D Lycée", status: "Terminé" },
-  { index: "02", title: "BUT Informatique", status: "En cours" },
+  { index: "01", title: "Diplôme du BIA Jules Ferry", status: "Terminé", img: biaImg },
+  { index: "02", title: "Parcours STI2D Lycée", status: "Terminé", img: breteuilImg },
+  { index: "03", title: "BUT Informatique", status: "En cours", img: butImg },
 ];
+
 
 export default function ResumePage({ src }) {
   const navigate = useNavigate();
@@ -309,7 +315,7 @@ export default function ResumePage({ src }) {
         }
         .resume-detail-row {
           display: grid;
-          grid-template-columns: 50px 1fr auto;
+          grid-template-columns: 50px 1fr auto auto;
           align-items: center;
           gap: 14px;
           min-height: 56px;
@@ -418,10 +424,21 @@ export default function ResumePage({ src }) {
 
             <div className="resume-detail-list">
               {EDUCATION_ROWS.map((row) => (
-                <div className="resume-detail-row" key={row.index}>
-                  <div className="resume-detail-row-index">{row.index}</div>
-                  <div className="resume-detail-row-title">{row.title}</div>
-                  <div className="resume-detail-status">{row.status}</div>
+                <div key={row.index}>
+                  <div className="resume-detail-row">
+                    <div className="resume-detail-row-index">{row.index}</div>
+                    <div className="resume-detail-row-title">{row.title}</div>
+                    <div className="resume-detail-status">{row.status}</div>
+                  </div>
+                  <img src={row.img} style={{
+                    width: "100%",
+                    height: "80px",
+                    objectFit: "cover",
+                    objectPosition: "center",
+                    display: "block",
+                    clipPath: "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)",
+                    marginBottom: "4px"
+                  }} />
                 </div>
               ))}
             </div>
@@ -557,6 +574,42 @@ export default function ResumePage({ src }) {
                 <div className="resume-detail-bullet"> Je suis quelqu'un qui est passionnée par ses projets</div>
                 <div className="resume-detail-bullet"> et qui n'hésite pas à chercher toujours plus loin pour</div>
                 <div className="resume-detail-bullet"> améliorer ses compétences</div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {active === 4 && (
+          <div className="resume-detail-panel">
+            <div className="resume-detail-top">
+              <div className="resume-detail-top-index">05</div>
+              <div className="resume-detail-top-title">Mon expérience professionnel</div>
+              <div className="resume-detail-top-progress">4/5</div>
+            </div>
+
+            <div style={{
+              margin: "16px 0",
+              clipPath: "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)",
+              overflow: "hidden"
+            }}>
+              <img
+                src={entrepriseImg}
+                style={{
+                  width: "100%",
+                  height: "140px",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  display: "block"
+                }}
+              />
+            </div>
+
+            <div className="resume-detail-bottom">
+              <div className="resume-detail-bottom-title">Détail Stage</div>
+              <div className="resume-detail-bullets">
+                <div className="resume-detail-bullet"> J'ai passé un stage de 1 semaine dans l'entreprise de mon oncle</div>
+                <div className="resume-detail-bullet"> pour découvrir le monde du travail, j'ai aidé sur plusieurs tâches</div>
+                <div className="resume-detail-bullet"> notamment sur le tri d'information d'entreprise dans un tableau excel</div>
               </div>
             </div>
           </div>

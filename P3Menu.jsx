@@ -220,8 +220,8 @@ export default function P3Menu() {
         </nav>
 
         <div className={`p3-hint ${mounted ? "mounted" : ""}`}>
-          <div className="p3-hint-row"><span className="p3-hint-key">↑↓</span><span>NAVIGATE</span></div>
-          <div className="p3-hint-row"><span className="p3-hint-key">↵</span><span>CONFIRM</span></div>
+          <div className="p3-hint-row"><span className="p3-hint-key">↑↓</span><span>Naviguer</span></div>
+          <div className="p3-hint-row"><span className="p3-hint-key">↵</span><span>Confirmer</span></div>
         </div>
       </div>
     </>
