@@ -18,61 +18,78 @@ const MAIN_IMAGES = [mainm, mainm2, mainf];
 const REVEAL_CONTENT = [
   {
     label: "Yokai Watch Showdown",
-    pages: [
+    sections: [
       {
-        upper: ["Simulateur de combat compétitif Yokai Watch", "Développé en Java Côté client et SQL côté serveur"],
+        id: "presentation",
+        label: "Présentation",
+        upper: ["Simulateur de combat compétitif Yokai Watch", "Développé en Java côté client et SQL côté serveur"],
         lower: "Le but du projet est de donner une plateforme de jeu free-to-play pour la communauté des fans de yokai-watch",
       },
       {
-        upper: ["Le logiciel client codé en Java va demander une requête vers l'API qui lui même communiquera avec la BDD",
-          "Tout cela a été implémenté dans un Projet Commun"],
-        lower: "Cliquer sur l'image pour mieux comprendre",
+        id: "situation",
+        label: "Situation",
+        upper: ["Absence de plateforme compétitive pour la communauté Yokai Watch", "Projet personnel free-to-play"],
+        lower: "situation",
+      },
+      {
+        id: "tache",
+        label: "Tâche",
+        upper: ["Concevoir un simulateur de combat compétitif de A à Z", "Développé seule — client Java, serveur Spring Boot, BDD MySQL"],
+        lower: "tâche",
+      },
+      {
+        id: "action",
+        label: "Action",
+        upper: ["API REST déployée sur Railway", "Architecture client-serveur, MySQL hébergé en cloud"],
+        lower: "cliquer sur l'image pour mieux comprendre",
         image: railwayImg,
       },
       {
-        upper: ["Parsing de JavaScript à SQL et de Java à JavaScript", "Sécurisation de base de donnée et Développement d'application"],
-        lower: "Ce sont les compétences que j'ai amélioré lors de ce projet en développement",
-      },
-      {
-        upper: ["Logiciel et autres utilisés pour ce projet :" , "VStudio (Programmation en java), Railway (Hôte de la BDD), Unity (Moteur 3D pour le jeu)"],
-        lower: "Durée estimé: 9 mois à 1 ans",
+        id: "resultat",
+        label: "Résultat",
+        upper: ["Application déployée et accessible en ligne", "Architecture complète et évolutive pour la communauté"],
+        lower: "résultat",
       },
     ],
   },
   {
     label: "Arctic Circus",
-    pages: [
-      { upper: ["Il s'agit d'un jeu programmé en 1 journée pour la GameJam 2026"], lower: "Axel, Makhdi, Quentin et moi avons crée ce jeu" },
+    sections: [
+      { id: "situation", label: "Situation", upper: ["Concours de développement de jeux vidéo en temps limité", "1 journée pour créer un jeu complet sur le thème du cirque"], lower: "situation" },
+      { id: "tache", label: "Tâche", upper: ["Concevoir et développer un jeu fonctionnel en équipe de 4", "Respecter le thème imposé dans un délai très court"], lower: "tâche" },
+      { id: "action", label: "Action", upper: ["Développement d'un jeu où un manchot jongle des balles", "Pour amuser le public du cirque"], lower: "action — collaboration et développement rapide" },
+      { id: "resultat", label: "Résultat", upper: ["Jeu complet et fonctionnel livré dans les temps", "Expérience de travail en équipe sous contrainte"], lower: "résultat" },
     ],
   },
   {
     label: "Projet C++",
-    pages: [
-      { upper:["Ce projet consiste à développer un petit jeu vidéo en 2D afin de comprendre les bases du développement",
-         " d’un moteur de jeu en language Bas niveau. Grâce à ce projet, j'ai pu acquérir des notions pour développer un jeu", 
-         "tel que l’affichage d’éléments graphiques, le déplacement d’un personnage, ainsi que les interactions des personnages"], lower: "Flêche pour aller à la suite" },
+    sections: [
+      { id: "situation", label: "Situation", upper: ["Projet académique pour comprendre les bases d'un moteur de jeu", "Aucune librairie abstraite — tout codé manuellement"], lower: "situation" },
+      { id: "tache", label: "Tâche", upper: ["Concevoir un jeu avec personnage, ennemis et niveaux chargeables", "Gestion des entrées clavier, animations et collisions"], lower: "tâche" },
+      { id: "action", label: "Action", upper: ["C++ orienté objet — classes séparées par responsabilité", "Niveaux chargés depuis fichiers externes pour plus de flexibilité"], lower: "action — développement bas niveau avec SDL" },
+      { id: "resultat", label: "Résultat", upper: ["Prototype fonctionnel avec déplacement, ennemis et décor", "Base solide pour aborder des projets graphiques plus complexes"], lower: "résultat" },
     ],
   },
 ];
 
 const ROLES = [
-  { text: "LEADER", color: "#e8c100", bg: "rgba(232,193,0,0.12)", border: "rgba(232,193,0,0.5)" },
-  { text: "PARTY", color: "#4a8fff", bg: "rgba(74,143,255,0.12)", border: "rgba(74,143,255,0.5)" },
-  { text: "PARTY", color: "#4a8fff", bg: "rgba(74,143,255,0.12)", border: "rgba(74,143,255,0.5)" },
+  { text: "LEADER" },
+  { text: "PARTY" },
+  { text: "PARTY" },
 ];
 
 const ITEMS = [
-  { id: "twitch", label: "Yokai Watch Showdown", icon: "🎮", barIcon: icon1 },
-  { id: "instagram", label: "Code Game Jam", icon: "📷", barIcon: icon2 },
-  { id: "tiktok", label: "Projet C++", icon: "🎵", barIcon: icon3 },
+  { id: "ykw", label: "Yokai Watch Showdown" },
+  { id: "arctic", label: "Arctic Circus" },
+  { id: "cpp", label: "Projet C++" },
 ];
 
 export default function AboutMe() {
   const [active, setActive] = useState(0);
+  const [activeSection, setActiveSection] = useState(null); // index de la section active à droite
+  const [focus, setFocus] = useState("left");   // "left" | "right"
   const [zoomedImage, setZoomedImage] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [revealed, setRevealed] = useState(false);
-  const [subPage, setSubPage] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -86,33 +103,33 @@ export default function AboutMe() {
         if (e.key === "Escape" || e.key === "Backspace" || e.key === "Enter") setZoomedImage(false);
         return;
       }
-      if (e.key === "ArrowUp") { setActive(i => Math.max(0, i - 1)); setSubPage(0); setRevealed(false); }
-      if (e.key === "ArrowDown") { setActive(i => Math.min(ITEMS.length - 1, i + 1)); setSubPage(0); setRevealed(false); }
-      if (e.key === "Enter") setRevealed(true);
-      if (e.key === "ArrowRight") {
-        if (!revealed) setRevealed(true);
-        else setSubPage(p => Math.min(REVEAL_CONTENT[active].pages.length - 1, p + 1));
+
+      if (focus === "left") {
+        if (e.key === "ArrowUp") setActive(i => { const n = Math.max(0, i - 1); setActiveSection(null); return n; });
+        if (e.key === "ArrowDown") setActive(i => { const n = Math.min(ITEMS.length - 1, i + 1); setActiveSection(null); return n; });
+        if (e.key === "ArrowRight") { setFocus("right"); setActiveSection(0); }
+        if (e.key === "ArrowLeft" || e.key === "Escape" || e.key === "Backspace") navigate(-1);
+      } else {
+        const sections = REVEAL_CONTENT[active].sections;
+        if (e.key === "ArrowUp") setActiveSection(i => Math.max(0, i - 1));
+        if (e.key === "ArrowDown") setActiveSection(i => Math.min(sections.length - 1, i + 1));
+        if (e.key === "ArrowLeft") { setFocus("left"); setActiveSection(null); }
+        if (e.key === "Escape" || e.key === "Backspace") { setFocus("left"); setActiveSection(null); }
       }
-      if (e.key === "ArrowLeft") {
-        if (revealed && subPage > 0) setSubPage(p => p - 1);
-        else if (revealed) setRevealed(false);
-        else navigate(-1);
-      }
-      if (e.key === "Escape" || e.key === "Backspace") navigate(-1);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [active, navigate, revealed, subPage, zoomedImage]);
+  }, [active, navigate, focus, zoomedImage]);
 
-  const currentPage = REVEAL_CONTENT[active].pages[subPage];
-  const totalPages = REVEAL_CONTENT[active].pages.length;
+  const currentSections = REVEAL_CONTENT[active].sections;
+  const currentSection = activeSection !== null ? currentSections[activeSection] : null;
 
   return (
     <div id="menu-screen">
       <video src={bgVideo} autoPlay loop muted playsInline />
 
-      {/* Zoom overlay — en dehors du panel pour pas être coupé par clip-path */}
-      {zoomedImage && currentPage.image && (
+      {/* Zoom overlay */}
+      {zoomedImage && currentSection?.image && (
         <div
           onClick={() => setZoomedImage(false)}
           style={{
@@ -123,65 +140,80 @@ export default function AboutMe() {
           }}
         >
           <img
-            src={currentPage.image}
+            src={currentSection.image}
             style={{
-              maxWidth: "90vw", maxHeight: "90vh",
-              objectFit: "contain",
+              maxWidth: "90vw", maxHeight: "90vh", objectFit: "contain",
               clipPath: "polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%)"
             }}
           />
         </div>
       )}
 
-      {revealed && <div key={`dim-${active}`} className="sc-dim" />}
-      {revealed && (
-        <div key={`panel-${active}-${subPage}`} className={`sc-reveal-panel${mounted ? " mounted" : ""}`} style={{ pointerEvents: "all" }}>
+      {/* Dim quand une section est sélectionnée */}
+      {currentSection && <div className="sc-dim" />}
+
+      {/* Panel de contenu */}
+      {currentSection && (
+        <div className={`sc-reveal-panel${mounted ? " mounted" : ""}`} style={{ pointerEvents: "all" }}>
           <div className="sc-reveal-upper-bar">
-            {currentPage.upper.map((line) => (
+            {currentSection.upper.map((line) => (
               <div className="sc-reveal-upper-line" key={line}>{line}</div>
             ))}
           </div>
-          {currentPage.image && (
+          {currentSection.image && (
             <div
               className="sc-reveal-image-bar"
               style={{ cursor: "zoom-in", pointerEvents: "all" }}
               onClick={() => setZoomedImage(true)}
             >
-              <img src={currentPage.image} alt="" className="sc-reveal-image" />
+              <img
+                src={currentSection.image}
+                alt=""
+                className="sc-reveal-image"
+                style={{ pointerEvents: "all", cursor: "zoom-in" }}
+                onClick={() => setZoomedImage(true)}
+              />
             </div>
           )}
           <div className="sc-reveal-lower-bar">
-            {Array.isArray(currentPage.lower)
-              ? currentPage.lower.map((line, i) => <div key={i}>{line}</div>)
-              : currentPage.lower}
+            {Array.isArray(currentSection.lower)
+              ? currentSection.lower.map((line, i) => <div key={i}>{line}</div>)
+              : currentSection.lower}
           </div>
-          {totalPages > 1 && (
-            <div className="sc-reveal-pagination">
-              {Array.from({ length: totalPages }).map((_, i) => (
-                <div key={i} className={`sc-reveal-dot${i === subPage ? " active" : ""}`} />
-              ))}
-            </div>
-          )}
         </div>
       )}
 
-      {revealed && (
-        <div key={`nav-${active}`} className="sc-right-nav">
-          <span className="sc-nav-arrow left">◄</span>
-          <span className="sc-nav-btn">LB</span>
-          <span className="sc-nav-dot" />
-          <span className="sc-nav-btn">RB</span>
-          <span className="sc-nav-arrow right">►</span>
-        </div>
-      )}
-      {revealed && (
-        <div key={`portrait-${active}`} className={`sc-main-portrait-shell${mounted ? " mounted" : ""}`}>
+      {/* Portrait */}
+      {currentSection && (
+        <div className={`sc-main-portrait-shell${mounted ? " mounted" : ""}`}>
           <img className="sc-main-portrait" src={MAIN_IMAGES[active]} alt="" />
         </div>
       )}
 
+      {/* Barres droite — sections STAR */}
+      {mounted && (
+        <div className="sc-right-sections">
+          {currentSections.map((section, i) => (
+            <div
+              key={section.id}
+              className={`sc-section-bar-outer${activeSection === i ? " active" : ""}${mounted ? " mounted" : ""}`}
+              style={{ animationDelay: `${i * 50}ms` }}
+              onClick={() => { setActiveSection(i); setFocus("right"); }}
+              onMouseEnter={() => { if (focus === "right") setActiveSection(i); }}
+            >
+              <div className="sc-section-bar">
+                <div className="sc-section-bar-fill" />
+                <div className="sc-section-bar-content">
+                  <div className="sc-section-label">{section.label}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,400;0,700;1,700&family=Montserrat:wght@300&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300&display=swap');
 
         .sc-root {
           position: absolute; inset: 0; z-index: 6; pointer-events: none;
@@ -214,6 +246,11 @@ export default function AboutMe() {
           0%, 100% { transform: translateX(0); opacity: 1; }
           50%       { transform: translateX(5px); opacity: 0.4; }
         }
+        @keyframes sc-section-in {
+          0%   { opacity: 0; transform: translateX(120px); }
+          60%  { opacity: 1; transform: translateX(-6px); }
+          100% { opacity: 1; transform: translateX(0); }
+        }
 
         .sc-main-portrait-shell {
           position: absolute; top: 0; right: -3vw; z-index: 13;
@@ -228,7 +265,7 @@ export default function AboutMe() {
 
         .sc-reveal-panel {
           position: absolute; top: 44vh; left: -6vw;
-          width: 88vw; height: 60vh; z-index: 12; pointer-events: none;
+          width: 88vw; height: 60vh; z-index: 15; pointer-events: none;
           background: linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(243,246,252,0.98) 100%);
           clip-path: polygon(0 0, 100% 0, calc(100% - 88px) 100%, 0 100%);
           box-shadow: 0 0 0 2px rgba(255,255,255,0.18), 18px 0 0 rgba(215,13,44,0.82), 28px 0 0 rgba(255,255,255,0.26);
@@ -248,7 +285,6 @@ export default function AboutMe() {
           position: absolute; top: 10%; left: 0; width: 100%; height: 40%;
           background: rgba(0,0,0,0.92);
           clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
-          box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
           display: flex; flex-direction: column;
           align-items: center; justify-content: center;
           gap: 10px; color: #fff; text-align: center;
@@ -259,70 +295,88 @@ export default function AboutMe() {
         }
 
         .sc-reveal-image-bar {
-          position: absolute; top: 52%; left: 0; width: 52%; height: 28%;
-          overflow: hidden;
-          clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
-          transition: filter 0.2s ease;
-        }
+  position: absolute; top: 52%; left: 0; width: 52%; height: 28%;
+  overflow: hidden;
+  transition: filter 0.2s ease;
+}
+
+.sc-reveal-image-bar, .sc-reveal-image {
+  pointer-events: all !important;
+  cursor: zoom-in !important;
+}
         .sc-reveal-image-bar:hover { filter: brightness(1.15); }
-        .sc-reveal-image {
-          width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
-        }
+        .sc-reveal-image { width: 100%; height: 100%; object-fit: cover; display: block; }
 
         .sc-reveal-lower-bar {
           position: absolute; top: 58%; right: 0; width: 48%; height: 20%;
           background: rgba(0,0,0,0.92);
           clip-path: polygon(0 0, 100% 0, calc(100% - 22px) 100%, 0 100%);
-          box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
-          display: flex; align-items: center; justify-content: flex-start;
+          display: flex; flex-direction: column; align-items: flex-start; justify-content: center;
           color: #fff; font-family: 'Montserrat', sans-serif; font-weight: 300;
-          font-size: 22px; letter-spacing: 0.4px; text-transform: lowercase; padding-left: 22px;
+          font-size: 18px; letter-spacing: 0.4px; text-transform: lowercase; padding-left: 22px; gap: 4px;
         }
 
-        .sc-reveal-pagination {
-          position: absolute; bottom: 12%; left: 50%; transform: translateX(-50%);
-          display: flex; gap: 8px; align-items: center;
-        }
-        .sc-reveal-dot {
-          width: 8px; height: 8px; border-radius: 999px; background: rgba(0,0,0,0.25);
-          transition: background 0.2s ease, transform 0.2s ease;
-        }
-        .sc-reveal-dot.active { background: #c4001a; transform: scale(1.3); }
-
-        @keyframes sc-right-nav-pop {
-          0%   { opacity: 0; transform: scale(0.55) translateY(-10px); }
-          65%  { opacity: 1; transform: scale(1.1) translateY(2px); }
-          100% { opacity: 1; transform: scale(1) translateY(0); }
-        }
-        .sc-right-nav {
-          position: absolute; top: 10vh; left: 6vw;
-          display: flex; align-items: center; gap: 6px;
-          pointer-events: none; z-index: 14;
-          transform: translateX(-40px) rotate(-20deg); transform-origin: left bottom;
-          animation: sc-right-nav-pop 0.38s cubic-bezier(0.22,1,0.36,1) both;
-        }
-        .sc-right-nav .sc-nav-btn {
-          font-family: 'Bebas Neue', sans-serif; font-size: 100px;
-          letter-spacing: 3px; line-height: 1; user-select: none;
-          color: #fff; -webkit-text-stroke: 2px #000; paint-order: stroke fill;
-          background: none; border: none; padding: 0 6px;
-        }
-        .sc-right-nav .sc-nav-dot {
-          width: 16px; height: 16px; border-radius: 999px;
-          background: #111; margin: 0 10px; flex-shrink: 0;
-        }
-        .sc-right-nav .sc-nav-arrow {
-          font-family: 'Bebas Neue', sans-serif; font-size: 22px;
-          color: #c4001a; display: inline-block; user-select: none;
-        }
-        .sc-right-nav .sc-nav-arrow.left  { animation: sc-arrow-left  0.8s ease-in-out infinite; }
-        .sc-right-nav .sc-nav-arrow.right { animation: sc-arrow-right 0.8s ease-in-out infinite; }
-
-        .sc-main-portrait {
-          width: 100%; height: 100%; object-fit: cover; object-position: top right;
-          transform: skewX(8deg) scale(1.08); transform-origin: top right;
+        /* Barres droite STAR */
+        .sc-right-sections {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          z-index: 16;
+          pointer-events: all;
         }
 
+        .sc-section-bar-outer {
+          position: relative;
+          animation: sc-section-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .sc-section-bar {
+          position: relative;
+          width: 200px;
+          height: 56px;
+          background: #111;
+          clip-path: polygon(14px 0, 100% 0, 100% 100%, 0 100%);
+          box-shadow: 0 4px 18px rgba(0,0,0,0.6);
+          cursor: pointer;
+          transition: height 0.2s ease, background 0.2s ease;
+          overflow: hidden;
+        }
+
+        .sc-section-bar-outer.active .sc-section-bar {
+          height: 70px;
+          background: #fff;
+          box-shadow: -8px 6px 0 #c4001a;
+        }
+
+        .sc-section-bar-fill {
+          position: absolute; inset: 0;
+          background: #fff;
+          clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%);
+          transition: clip-path 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+          z-index: 0;
+        }
+        .sc-section-bar-outer.active .sc-section-bar-fill {
+          clip-path: polygon(60% 0, 100% 0, 100% 100%, 46% 100%);
+        }
+
+        .sc-section-bar-content {
+          position: relative; z-index: 2; height: 100%;
+          display: flex; align-items: center; padding: 0 18px;
+        }
+
+        .sc-section-label {
+          font-family: 'Bebas Neue', sans-serif;
+          font-size: 24px; letter-spacing: 3px; line-height: 1;
+          color: rgba(255,255,255,0.85);
+          transition: color 0.2s ease; user-select: none;
+        }
+        .sc-section-bar-outer.active .sc-section-label { color: #111; }
+
+        /* Barres gauche projet */
         .sc-bar {
           position: relative; width: 45vw; height: 64px;
           transition: height 0.3s cubic-bezier(0.22,1,0.36,1);
@@ -413,11 +467,12 @@ export default function AboutMe() {
         .sc-footer.mounted { opacity: 1; }
         .sc-footer-row {
           display: flex; align-items: center; gap: 8px;
-          font-size: 13px; letter-spacing: 2px; color: rgba(255,255,255,0.22);
+          font-size: 13px; letter-spacing: 2px; color: rgba(255,255,255,0.7);
         }
         .sc-footer-key {
-          border: 1px solid rgba(255,255,255,0.15); border-radius: 3px;
+          border: 2px solid rgba(255,255,255,0.3); border-radius: 3px;
           padding: 1px 6px; font-size: 11px;
+          color: rgba(255,255,255,0.8);
         }
       `}</style>
 
@@ -426,8 +481,8 @@ export default function AboutMe() {
           <div
             key={item.id}
             className={`sc-bar-outer${active === i ? " active" : ""}${mounted ? " mounted" : ""}`}
-            onClick={() => { setActive(i); setSubPage(0); setRevealed(false); }}
-            onMouseEnter={() => { if (!revealed) setActive(i); }}
+            onClick={() => { setActive(i); setActiveSection(null); setFocus("left"); }}
+            onMouseEnter={() => { if (focus === "left") setActive(i); }}
           >
             <div className="sc-bar-red" />
             <div className="sc-bar">
@@ -449,7 +504,7 @@ export default function AboutMe() {
 
       <div className={`sc-footer${mounted ? " mounted" : ""}`}>
         <div className="sc-footer-row"><span className="sc-footer-key">↑↓</span><span>SELECT</span></div>
-        <div className="sc-footer-row"><span className="sc-footer-key">↵ / →</span><span>REVEAL</span></div>
+        <div className="sc-footer-row"><span className="sc-footer-key">→</span><span>SECTIONS</span></div>
         <div className="sc-footer-row"><span className="sc-footer-key">←</span><span>BACK</span></div>
         <div className="sc-footer-row"><span className="sc-footer-key">ESC</span><span>MENU</span></div>
       </div>
